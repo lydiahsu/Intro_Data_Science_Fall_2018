@@ -1,3 +1,5 @@
+https://lydiahsu.github.io/Intro_Data_Science_Fall_2018/
+
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/lydiahsu/Intro_Data_Science_Fall_2018/edit/gh-pages/README.md) to maintain and preview the content for your website in Markdown files.
