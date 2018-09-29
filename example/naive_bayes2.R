@@ -28,8 +28,8 @@ text <- text[text != ""]
 
 verse <- str_extract(string = text, pattern = "[0-9]+:[0-9]+")
 
-text[str_which(verse == "1:1")]
-text[str_which(verse == "1:1") - 1]
+text[which(verse == "1:1")]
+text[which(verse == "1:1") - 1]
 
 text <- text[- (which(verse == "1:1") - 1)]
 
@@ -58,10 +58,10 @@ ifelse(test = k <= length(old), yes = "old", no = "new")
 set.seed(seed = 1)
 num_train <- 1000
 
-smp_old <- sample(x = seq_along(along.with = old_train), size = num_train)
+smp_old <- sample(x = seq_along(along.with = old), size = num_train)
 old_train <- old[smp_old]
 
-smp_new <- sample(x = seq_along(along.with = new_train), size = num_train)
+smp_new <- sample(x = seq_along(along.with = new), size = num_train)
 new_train <- new[smp_new]
 
 old_test <- old[-smp_old]
