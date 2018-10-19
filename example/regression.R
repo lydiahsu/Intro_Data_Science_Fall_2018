@@ -14,6 +14,11 @@ library("ggplot2")
 #goal: check San Fransisco Predicion http://pubs.usgs.gov/fs/2015/3009/pdf/fs2015-3009.pdf
 #read more about Gutenberg Richter Law: https://en.wikipedia.org/wiki/Gutenberg%E2%80%93Richter_law
 # data from http://earthquake.usgs.gov/earthquakes/search/
+# this data is now two years old. feel free to check the website and get some newer data 
+# or data from different locations
+
+# maybe the methods we use below don't really work for a different choice of data?
+
 url <- "https://raw.githubusercontent.com/lydiahsu/Intro-Data-Science-Fall-2016/gh-pages/example/usgs.csv"
 usgs <- read.csv(url)
 head(usgs)
@@ -21,11 +26,27 @@ colnames(usgs)
 usgs$Date <- substr(usgs$time,1,10)
 usgs$Date <- as.Date(usgs$Date,format="%Y-%m-%d")
 
+head(usgs$Date)
+
+## we used qplot previously as an introduction to ggplot functionality.
+## now we will use the more flexible ggplot command
+
+map + geom_point( aes(longitude, latitude) , data = usgs) + theme_bw()
+
+install.packages("ggmap")
+library(ggmap)
+map <- ggmap(get_map(location = c(-123.9,35.99,-119.3,39.27))
+             ,zoom = 8)
+# if you get a forbidden error up above wait a minute and then run it again. google locks you out sometimes
+map + geom_point( aes(longitude, latitude) , data = usgs) + theme_bw()
+
 ggplot(usgs) +
   aes(x=Date,y=mag) +
   geom_point() + 
   theme_bw() +
   labs(x="time",y="magnitude") 
+
+# lets write a function to count how many earthquakes are above a given magnitude
 
 count <- function(x) sum(usgs$mag > x)
 gut_rich <- data.frame(mag = seq(3,7,.5),
@@ -36,11 +57,37 @@ ggplot(gut_rich) +
   geom_point() +
   theme_bw()
 
+# the higher magnitudes all look the same because of the scale. lets zoom in on the y axis near 0
+
+ggplot(gut_rich) +
+  aes(mag,count) +
+  geom_point() +
+  theme_bw() +
+  ylim(0,100)
+
+# and even more... just to see the values
+
+ggplot(gut_rich) +
+  aes(mag,count) +
+  geom_point() +
+  theme_bw() +
+  ylim(0,10)
+
+# when the y values change this much it often do to the scaling being wrong. lets do a log transform 
+# on the y axis
+
 ggplot(gut_rich) +
   aes(mag,count) +
   geom_point() +
   theme_bw() +
   scale_y_log10()
+
+ggplot(gut_rich) +
+  aes(mag,count) +
+  geom_point() +
+  theme_bw() +
+  scale_y_sqrt()
+
 
 ggplot(gut_rich) +
   aes(mag,count) +
